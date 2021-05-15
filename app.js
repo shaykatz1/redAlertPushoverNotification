@@ -2,6 +2,8 @@ require('dotenv').config();
 const chalk = require('chalk');
 const axios = require('axios').default;
 const cron = require('node-cron');
+var Pushover = require( 'pushover-js').Pushover;
+const pushover = new Pushover( process.env.pushoverUser , process.env.pushoverToken);
 
 const LEVEL = {
   INFO: 'info',
@@ -24,8 +26,18 @@ const options = {
   }
 };
 
+function sendMsg(name) {
+pushover
+.setPriority(1)
+.setSound('persistent')
+.send(name,'RED ALERT')
+.catch((e) => {
+    console.error(e)
+  })
+}
+
 const changeStatus = async(txt, emoji, status) => {
-  
+
   let currentDate = new Date().toLocaleString("en-US", {timeZone: 'Asia/Jerusalem'});
   let futureDate = new Date(currentDate).getTime() + 10 * 60000;
   axios.post('https://slack.com/api/users.profile.set', {
@@ -57,29 +69,29 @@ const getAlerts = () => {
   };
 
   axios.get(url, options).then((res) => {
-   
+
     const rawData = res.data;
     if(!rawData.data) return
     logger([rawData.data, rawData.data.length])
-    
+
     for (let i = 0; i < rawData.data.length; i++) {
       logger(rawData.data[i], LEVEL.WARN)
-      
+
       if(process.env.CITY=='all'){
-         changeStatus(`אזעקה ב${rawData.data.join(',')}`, ':loudspeaker:', 'away')
       } else {
-        if (rawData.data[i] == process.env.CITY) {          
-            changeStatus(process.env.ALERT_MESSAGE, ':loudspeaker:', 'away')
-         } 
-      }     
-           
+        if (rawData.data[i] == process.env.CITY) {
+            sendMsg('Alert in your city')
+         }
+      }
+
     }
   });
 }
 
+
 changeStatus(process.env.CLEAR_MESSAGE, ':smile:', 'auto');
 getAlerts()
-logger('Running a task every 10 second', LEVEL.INFO);  
-cron.schedule('*/10 * * * * *', () => {
+logger('Running a task every 1 second', LEVEL.INFO);
+cron.schedule('*/1 * * * * *', () => {
   getAlerts()
 });
