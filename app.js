@@ -36,26 +36,6 @@ pushover
   })
 }
 
-const changeStatus = async(txt, emoji, status) => {
-  
-  let currentDate = new Date().toLocaleString("en-US", {timeZone: 'Asia/Jerusalem'});
-  let futureDate = new Date(currentDate).getTime() + 10 * 60000;
-  axios.post('https://slack.com/api/users.profile.set', {
-    "profile": {
-      "status_text": txt,
-      "status_emoji": emoji,
-      "status_expiration": futureDate / 1000 /* I'm not sure why i need to devide this number to 1000 but it works */
-    }
-  }, options).then((res) => {
-    if (!res.data.ok) {
-      logger(res.data.error, LEVEL.ALERT)
-    }
-  }).catch((e)=> {
-    logger(e, LEVEL.WARN)
-  });
-  axios.post('https://slack.com/api/users.setPresence',{presence: status}, options)
-}
-
 
 
 const getAlerts = () => {
@@ -78,7 +58,6 @@ const getAlerts = () => {
       logger(rawData.data[i], LEVEL.WARN)
       
       if(process.env.CITY=='all'){
-         changeStatus(`אזעקה ב${rawData.data.join(',')}`, ':loudspeaker:', 'away')
       } else {
         if (rawData.data[i] == process.env.CITY) {          
        		sendMsg('Rocket alert in your city') 
@@ -89,7 +68,6 @@ const getAlerts = () => {
   });
 }
 
-changeStatus(process.env.CLEAR_MESSAGE, ':smile:', 'auto');
 getAlerts()
 logger('Running a task every 1 second', LEVEL.INFO);  
 cron.schedule('*/1 * * * * *', () => {
