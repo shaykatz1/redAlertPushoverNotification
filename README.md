@@ -20,10 +20,13 @@ npm install
 
 ## Prerequisite
 
-you need to create a personal token for pushover, and the pushover app installed on your phone 
+you need to create a personal token for pushover, and the pushover app installed on your phone :
+https://pushover.net/
+in the iphone notification settings for the pushover app, go to settings and make sure you allow critical alerts.
+in the pushover app on iphone, go to settings and make sure to allow "Critical Alerts for high-priority"
 
- - 
 - update [./.env](.env) file with your personal pushover user ID, pushover token, and your city
+- city is your alert area, and it should be written exactly as written in hebrew by Pikud Ha'oref. For example: "תל אביב - מרכז העיר"
 
 ## Usage
 ```
@@ -31,6 +34,7 @@ npm run start
 ```
 
 in any case of red alert in your city - the script should notify you via the pushover app
+**Attention: This is not an official Pikud Ha'oref app**, and I have personaly seen a delay of up to 30 seconds in alerts.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
