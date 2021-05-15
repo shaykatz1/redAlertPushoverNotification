@@ -36,6 +36,16 @@ npm run start
 in any case of red alert in your city - the script should notify you via the pushover app
 **Attention: This is not an official Pikud Ha'oref app**, and I have personaly seen a delay of up to 30 seconds in alerts.
 
+If you would like for this app to run in the backgroud continously, you can use the following:
+```
+sudo npm install pm2 -g
+```
+when pm2 finisehs installing, run:
+```
+pm2 --name redAlert start npm -- start
+```
+and now the app should run in the background
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
