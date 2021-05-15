@@ -5,6 +5,13 @@ This is especially useful for iphone users, as the pushover app allows your to b
 
 ## Installation
 
+Install the necessary pushover-js package
+
+```
+npm install --save pushover-js
+```
+
+
 clone the project and install it 
 
 ```
@@ -14,6 +21,7 @@ npm install
 ## Prerequisite
 
 you need to create a personal token for pushover, and the pushover app installed on your phone 
+
  - 
 - update [./.env](.env) file with your personal pushover user ID, pushover token, and your city
 
