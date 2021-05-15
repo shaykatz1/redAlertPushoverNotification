@@ -1,6 +1,7 @@
-# RedAlertStatusChanger
+# RedAlertPushoverNotification
 
-RedAlertStatusChanger is a node js library for automatic change your slack status incase of a red alert (צבע אדום) in your city
+RedAlertPushoverNotification is a node js library for sending a notification to your phone via the pushover app, of a red alert (צבע אדום) in your city
+This is especially useful for iphone users, as the pushover app allows your to bypass DND mode and silent mode via the critical alerts feature.
 
 ## Installation
 
@@ -12,17 +13,16 @@ npm install
 
 ## Prerequisite
 
-you need to create a personal token, 
- - first visit [slack api portal](https://api.slack.com/apps) to create your app
- - follow [this guide](https://medium.com/@andrewarrow/how-to-get-slack-api-tokens-with-client-scope-e311856ebe9) to get the slack api token 
-- update [./.env](.env) file with your personal token, city, ALARM_MESSAGE and CLEAR_MESSAGE
+you need to create a personal token for pushover, and the pushover app installed on your phone 
+ - 
+- update [./.env](.env) file with your personal pushover user ID, pushover token, and your city
 
 ## Usage
 ```
 npm run start
 ```
 
-in any case of red alert in your city - the script will change your slack status for 10 minutes, 
+in any case of red alert in your city - the script should notify you via the pushover app
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
