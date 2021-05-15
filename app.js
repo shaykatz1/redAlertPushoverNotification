@@ -37,7 +37,7 @@ pushover
 }
 
 const changeStatus = async(txt, emoji, status) => {
-
+  
   let currentDate = new Date().toLocaleString("en-US", {timeZone: 'Asia/Jerusalem'});
   let futureDate = new Date(currentDate).getTime() + 10 * 60000;
   axios.post('https://slack.com/api/users.profile.set', {
@@ -69,29 +69,30 @@ const getAlerts = () => {
   };
 
   axios.get(url, options).then((res) => {
-
+   
     const rawData = res.data;
     if(!rawData.data) return
     logger([rawData.data, rawData.data.length])
-
+    
     for (let i = 0; i < rawData.data.length; i++) {
       logger(rawData.data[i], LEVEL.WARN)
-
+      
       if(process.env.CITY=='all'){
+         changeStatus(`אזעקה ב${rawData.data.join(',')}`, ':loudspeaker:', 'away')
       } else {
-        if (rawData.data[i] == process.env.CITY) {
-            sendMsg('Alert in your city')
-         }
-      }
-
+        if (rawData.data[i] == process.env.CITY) {          
+       		sendMsg('Rocket alert in your city') 
+	 } 
+      }     
+           
     }
   });
 }
 
-
 changeStatus(process.env.CLEAR_MESSAGE, ':smile:', 'auto');
 getAlerts()
-logger('Running a task every 1 second', LEVEL.INFO);
+logger('Running a task every 1 second', LEVEL.INFO);  
 cron.schedule('*/1 * * * * *', () => {
   getAlerts()
 });
+
