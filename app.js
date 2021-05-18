@@ -4,6 +4,8 @@ const axios = require('axios').default;
 const cron = require('node-cron');
 var Pushover = require( 'pushover-js').Pushover;
 const pushover = new Pushover( process.env.pushoverUser , process.env.pushoverToken);
+var counter = 91;
+var alertInterval=90;
 
 const LEVEL = {
   INFO: 'info',
@@ -26,10 +28,10 @@ const options = {
   }
 };
 
-function sendMsg(name) {
+function sendMsg(name,sound,priority) {
 pushover
-.setPriority(1)
-.setSound('persistent')
+.setPriority(priority)
+.setSound(sound)
 .send(name,'RED ALERT')
 .catch((e) => {
     console.error(e)
@@ -58,11 +60,18 @@ const getAlerts = () => {
       logger(rawData.data[i], LEVEL.WARN)
       
       if(process.env.CITY=='all'){
-      } else {
+		if (counter>alertInterval){
+			sendMsg('Alert Not In your area', process.env.pushoverSound, process.env.pushoverPriority)
+			counter=0	
+		}
+	} else {
         if (rawData.data[i] == process.env.CITY) {          
-       		sendMsg('Rocket alert in your city') 
-	 } 
-      }     
+       		if (counter>alertInterval){	
+			sendMsg('Rocket alert in your city', process.env.pushoverSound, process.env.pushoverPriority) 
+	 	 	counter=0	
+		}	 
+	}
+}     
            
     }
   });
@@ -71,6 +80,9 @@ const getAlerts = () => {
 getAlerts()
 logger('Running a task every 1 second', LEVEL.INFO);  
 cron.schedule('*/1 * * * * *', () => {
+if (counter<=alertInterval){
+  counter=counter+1
+}
   getAlerts()
 });
 

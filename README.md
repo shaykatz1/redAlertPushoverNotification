@@ -22,8 +22,9 @@ npm install
 
 you need to create a personal token for pushover, and the pushover app installed on your phone 
 
- - 
 - update [./.env](.env) file with your personal pushover user ID, pushover token, and your city
+- update [./.env](.env) file with your selected sound and notification pririty.
+  default is set to siren sound and priority 1. For more information on pushover api: https://pushover.net/api 
 
 ## Usage
 ```
